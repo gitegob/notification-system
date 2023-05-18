@@ -72,7 +72,7 @@ This is responsible for sending out the notifications requested by the clients.
 - It includes in itself the Consumer component which listens to the queue.
 - When a request is received from the queue, it then uses it to send the notification for that request.
 
-## Scalability and Performance Considerations
+## Scalability and Performance
 
 To ensure scalability and handle high request volumes, the following considerations are taken into account:
 
