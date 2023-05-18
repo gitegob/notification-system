@@ -11,42 +11,53 @@ services:
     depends_on:
       - redis
       - rabbitmq
-    image: gitegob/apiratelimiter:latest
+    build:
+      context: ./rate-limiter
+      dockerfile: Dockerfile
     environment:
       REDIS_HOST: redis
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
     ports:
       - 3001:3000
+    restart: on-failure
   apiratelimiter2:
     container_name: apiratelimiter2
     depends_on:
       - redis
       - rabbitmq
-    image: gitegob/apiratelimiter:latest
+    build:
+      context: ./rate-limiter
+      dockerfile: Dockerfile
     environment:
       REDIS_HOST: redis
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
     ports:
       - 3002:3000
-
+    restart: on-failure
   notification-api1:
     container_name: notification-api1
     depends_on:
       - rabbitmq
-    image: gitegob/notification-api:latest
+    build:
+      context: ./notification-api
+      dockerfile: Dockerfile
     environment:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
     ports:
       - 4001:4000
+    restart: on-failure
   notification-api2:
     container_name: notification-api2
     depends_on:
       - rabbitmq
-    image: gitegob/notification-api:latest
+    build:
+      context: ./notification-api
+      dockerfile: Dockerfile
     environment:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
     ports:
       - 4002:4000
+    restart: on-failure
 
   # postgres:
   #   container_name: postgres
