@@ -1,0 +1,60 @@
+workspace {
+
+     model {
+        sender = person "Sender"
+        receiver = person "Receiver"
+    
+        notificationSystem = softwaresystem "Notification System" "Notification system" {
+            loadbalancer = container "Load balancer"{
+                sender -> this "Sends notification request"
+            }
+            redis = container "Redis" "Distributed cache"
+            group "Rate Limiter Middleware" {
+                 rateLimiter1 = container "Rate Limiter middleware (Node 1)" "Receives requests and handles rate limiting per client and globally"{
+                requestlimiterguard = component "Request Limiting Guard" "Checks the rate limit information for incoming requests before continuing execution"{
+                loadbalancer -> this "Forwards notification request"
+                redis -> this "Get rate limiting details (limit & request count)"
+                this -> redis "Update request cound and limit details"
+                }
+                controller = component "Controller" "Receives the notification request"{
+                 requestlimiterguard -> this "Forwards the request to the controller"
+                }
+                messageemitter = component "Message Emitter Service" "Sends the request to the queue"{
+                    controller -> this "Sends the request to be sent to the queue"
+                }
+            }
+                rateLimiter2 = container "Rate Limiter middleware (Node 2)" "Receives requests and handles rate limiting per client and globally"{
+                loadbalancer -> this "Forwards notification request"
+            }
+            }
+            rabbitmq = container "RabbitMQ" "Queueing system for the notification requests" {
+                ratelimiter1 -> this "Sends notification request details to the queue"
+                ratelimiter2 -> this "Sends notification request details to the queue"
+
+            }
+            group "Notification API service cluster" {
+                 notificationapi1 = container "Notification API service (Node 1)" "Handles sending the notifications"{
+                messageconsumer = component "Message consumer service" "Listens to and consumes the messages from the queue"{
+                    rabbitmq -> this "Receives notification details from the queue"
+                }
+                notificationservice = component "Notification Service" "Sends the notifications"{
+                    messageconsumer -> this "Forwards notification details to be sent out"
+                    this -> receiver "Sends notification"
+                }
+            }
+              notificationapi2 = container "Notification API service (Node 2)" "Handles sending the notifications"{
+                rabbitmq -> this "Receives notification details from the queue"
+                this -> receiver "Sends notification"
+                
+            }
+            }
+        }
+        
+    }
+
+    views {
+
+            theme default
+    }
+
+}
