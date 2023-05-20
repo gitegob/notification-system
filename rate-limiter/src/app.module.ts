@@ -31,6 +31,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLimitMiddleware).forRoutes('*');
+    consumer.apply(RequestLimitMiddleware).forRoutes('/notifications/*');
   }
 }

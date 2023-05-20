@@ -2,8 +2,10 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { MessageEmitterService } from '../_shared/services/message-emitter.service';
 import { EmailDto } from './dto/email.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('notifications')
+@ApiTags('Notifications')
 @UseGuards(ThrottlerGuard)
 export class NotificationsController {
   constructor(private readonly messageEmitterService: MessageEmitterService) {}
