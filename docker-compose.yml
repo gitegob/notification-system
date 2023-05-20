@@ -59,17 +59,17 @@ services:
       - 4002:4000
     restart: on-failure
 
-  # postgres:
-  #   container_name: postgres
-  #   image: postgres:14-alpine
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: postgres
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
+  postgres:
+    container_name: postgres
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   rabbitmq:
     container_name: rabbitmq
@@ -86,3 +86,4 @@ services:
 volumes:
   redis_data:
   rabbitmq_data:
+  postgres_data:

@@ -16,6 +16,8 @@ The system architecture consists of the following components:
 
 ## System architecture - C4 Model
 
+The system follows a distributed setup, with multiple API servers, a shared Redis cache, and a RabbitMQ cluster. Each component plays a specific role in enforcing rate limits and handling requests.
+
 ### System context
 
 ![](architecture/SystemContext.png)
@@ -31,8 +33,6 @@ The system architecture consists of the following components:
 ### Notification API Server - Components
 
 ![](architecture/NotificationAPIservice-Component.png)
-
-The system follows a distributed setup, with multiple API servers, a shared Redis cache, and a RabbitMQ cluster. Each component plays a specific role in enforcing rate limits and handling requests.
 
 ### Rate Limiter Middleware
 
@@ -83,6 +83,24 @@ To ensure scalability and handle high request volumes, the following considerati
 
 - Monitoring and Metrics: Implementing monitoring tools and collecting metrics helps identify performance bottlenecks, track request rates, and monitor system health.
 
+## Fault tolerance
+
+The following measures can be taken to ensure fault tolerance:
+
+- Redundancy: Introduce redundancy at various levels of the system to ensure that critical components have backup alternatives. For example, we can have multiple instances of the rate limiter, load balancers, postgres database, and Rabbitmq in a cluster.
+- Load balancing: Use a load balancer(s) to ensure that requests are equitably shared between nodes according to the available resources. This helps make sure that if a node is down, its requests can be divided between the still active nodes.
+- Backup and Disaster Recovery: Establish backup mechanisms and disaster recovery strategies to protect critical data and ensure business continuity. Regularly back up data to ensure nothing is lost in case of catastrophic events.
+
+## Monitoring
+
+Monitoring can be done by leveraging several techniques and tools:
+
+- Application logging: Comprehensive application logging should be implemented to keep track of what's happening
+- Monitoring: Monitoring tools can be used to collect logs and performance data.
+  - Prometheus: For metrics data like uptime, disk usage, RAM usage, Health checks,...
+  - Sentry: For tracking errors, transactions and setting up alerts in case of specific errors or error counts.
+  - Grafana: For visualizing metric data and setting up alerts in cases of exceeded usage.
+
 ## Local Setup & Usage
 
 The local setup is a simplified setup using docker with 2 rate limiter containers, 2 notification api containers, a redis database container and a rabbitmq container.
@@ -102,3 +120,7 @@ The local setup is a simplified setup using docker with 2 rate limiter container
 ## Conclusion
 
 The Notification Service Rate Limiting system effectively handles rate limiting for SMS and email notifications. By leveraging NestJS, Redis, and RabbitMQ, the system enforces rate limits on a per-client and global basis, ensuring system performance, preventing abuse, and queuing requests that exceed rate limits for controlled processing. The distributed setup allows for scalability, fault tolerance, and efficient handling of high request volumes.
+
+# Author
+
+- [Brian Gitego](mailto:gitegob@gmail.com)
