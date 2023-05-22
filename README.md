@@ -4,6 +4,8 @@
 
 The Notification Service Rate Limiting system is designed to handle rate limiting for sending SMS and email notifications to clients. The system ensures that the number of requests from clients is controlled within specified limits to maintain system performance and prevent abuse. The solution is built using NestJS, Redis for caching, and RabbitMQ for queuing requests.
 
+[Swagger UI Link](http://104.236.68.72:3000/)
+
 ## System Overview
 
 The system architecture consists of the following components:
@@ -116,6 +118,20 @@ The local setup is a simplified setup using docker with 2 rate limiter container
 - Run `docker-compose up`
 - The notification api containers run on ports 4001 and 4002
 - The rate limiter containers run on ports 3001 and 3002
+
+## Testing
+
+For testing the Rate Limiter go into the rate-limiter directory and run
+
+```
+npm run test:e2e
+```
+
+There are 3 test cases:
+
+- Too many requests within a time window from a client
+- Too many requests by a client on a monthly basis
+- Too many requests across the entire system
 
 ## Conclusion
 

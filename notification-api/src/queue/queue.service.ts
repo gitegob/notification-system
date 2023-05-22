@@ -25,15 +25,12 @@ export class QueueService {
     this.channel.consume(this.queue, async (msg) => {
       if (msg) {
         const json = JSON.parse(msg.content.toString());
-        this.notificationService.sendEmail({ message: json.message });
+        this.notificationService.sendSMS({
+          to: json.to,
+          message: json.message,
+        });
         this.channel.ack(msg);
       }
-    });
-  }
-
-  async enqueueMessage(message: any) {
-    this.channel.sendToQueue(this.queue, Buffer.from(JSON.stringify(message)), {
-      persistent: true,
     });
   }
 }

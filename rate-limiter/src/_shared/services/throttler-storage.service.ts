@@ -12,7 +12,7 @@ export class ThrottlerStorageService implements ThrottlerStorage {
     return { totalHits: 0, timeToExpire: 0 };
   }
   async getRecord(key: string): Promise<number> {
-    const rateLimit = this.usageService.getClientLimitPerSecond(key);
+    const rateLimit = this.usageService.getClientLimitPerTimeWindow(key);
     return rateLimit || 0;
   }
 
