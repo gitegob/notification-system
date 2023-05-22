@@ -17,6 +17,8 @@ services:
     environment:
       REDIS_HOST: redis
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      THROTTLE_TTL: "60"
+      THROTTLE_LIMIT: "80"
     ports:
       - 3001:3000
     restart: on-failure

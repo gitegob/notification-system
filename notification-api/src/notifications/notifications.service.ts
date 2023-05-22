@@ -1,14 +1,30 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
+import { lastValueFrom, map } from 'rxjs';
 import { EmailDto } from './dto/email.dto';
+import 'dotenv/config';
 
 @Injectable()
 export class NotificationsService {
-  async sendEmail(dto: EmailDto): Promise<string> {
-    return new Promise<string>((resolve) => {
-      setTimeout(() => {
-        Logger.log(`${dto.message} Email sent!`);
-        resolve(`${dto.message} Email sent!`);
-      }, 2000);
-    });
+  constructor(private readonly http: HttpService) {}
+  async sendSMS(dto: EmailDto): Promise<void> {
+    const data = {
+      to: dto.to,
+      text: dto.message,
+      sender: 'XYZ',
+    };
+    await lastValueFrom(
+      this.http
+        .post(process.env.PINDO_URL, data, {
+          headers: {
+            Authorization: `Bearer ${process.env.PINDO_API_KEY}`,
+          },
+        })
+        .pipe(
+          map((response) => {
+            return response.data;
+          }),
+        ),
+    );
   }
 }

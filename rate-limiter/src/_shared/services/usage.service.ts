@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import Redis from 'ioredis';
 import { RedisService } from './redis.service';
@@ -10,9 +10,8 @@ export class UsageService {
     this.redisClient = this.redisService.getClient();
   }
 
-  async incrementRequestCount(clientId: string) {
-    const currentCount = await this.getClientMonthlyRequestCount(clientId);
-    Logger.log(`Current count: ${currentCount}`);
+  async incrementMonthlyRequestCount(clientId: string) {
+    await this.getClientMonthlyRequestCount(clientId);
     await this.redisClient.incr(`monthly_requests:${clientId}`);
   }
 
@@ -24,7 +23,7 @@ export class UsageService {
   async isClientMonthlyLimitExceeded(clientId: string): Promise<boolean> {
     const limit = this.getClientMonthlyLimit(clientId);
     const count = await this.getClientMonthlyRequestCount(clientId);
-    return count > limit;
+    return count >= limit;
   }
 
   @Cron('* * * */30 * *')
@@ -34,20 +33,18 @@ export class UsageService {
       await this.redisClient.del(...keys);
     }
   }
-  @Cron('*/1 * * * * *')
-  async resetPerSecondCounters() {
-    const keys = await this.redisClient.keys('second_requests:*');
-    if (keys.length > 0) {
-      await this.redisClient.del(...keys);
-    }
-  }
 
   getClientMonthlyLimit(clientId: string) {
     // TODO Get client monthly limit from database for the current month
     return 1000;
   }
-  getClientLimitPerSecond(clientId: string): number {
-    // TODO get client limit per second from database
-    return 1;
+  getClientLimitPerTimeWindow(clientId: string): number {
+    // TODO get client limit per time window from database
+    return 40;
+  }
+
+  getClientTimeWindow(clientId: string): number {
+    // TODO get client time window in seconds from database
+    return 60;
   }
 }
