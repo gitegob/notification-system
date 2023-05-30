@@ -67,6 +67,15 @@ The Consumer component is responsible for consuming requests from the RabbitMQ q
 - The processing may involve sending the notification, updating relevant data, and performing any required actions.
 - Once processing is complete, the request is acknowledged and removed from the queue.
 
+### SpringCloud Eureka
+
+SpringCloud Eureka is used here to monitor all the services in one place. It helps keep track of:
+
+- Locations of the services
+- Overall memory usage
+- Status (UP or DOWN)
+- It can also be integrated with other tools like Netflix's Zuul for dynamic routing.
+
 ### Notification API Server
 
 This is responsible for sending out the notifications requested by the clients.
@@ -117,7 +126,7 @@ The local setup is a simplified setup using docker with 2 rate limiter container
 
 - Run `docker-compose up`
 - The notification api containers run on ports 4001 and 4002
-- The rate limiter containers run on ports 3001 and 3002
+- The rate limiter containers run on ports 3000 and 4000
 
 ## Testing
 
