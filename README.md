@@ -4,7 +4,8 @@
 
 The Notification Service Rate Limiting system is designed to handle rate limiting for sending SMS and email notifications to clients. The system ensures that the number of requests from clients is controlled within specified limits to maintain system performance and prevent abuse. The solution is built using NestJS, Redis for caching, and RabbitMQ for queuing requests.
 
-[Swagger UI Link](http://164.92.228.141:3000/)
+[Swagger UI Link](http://164.92.228.141)
+[Eureka Link](http://164.92.228.141:8761)
 
 ## System Overview
 
