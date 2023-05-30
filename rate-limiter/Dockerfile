@@ -10,4 +10,6 @@ RUN npm run build
 FROM base AS production
 COPY --from=build /usr/src/app/ ./
 
+EXPOSE 3000
+
 CMD ["npm","run","start:prod"]

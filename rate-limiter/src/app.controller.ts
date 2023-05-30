@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiSecurity } from '@nestjs/swagger';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { EmailDto } from './_shared/dto/email.dto';
@@ -9,6 +9,10 @@ import { MessageEmitterService } from './_shared/services/message-emitter.servic
 @ApiSecurity('client-id')
 export class AppController {
   constructor(private readonly messageEmitterService: MessageEmitterService) {}
+  @Get('info')
+  getInfo(): { name: string } {
+    return { name: 'Rate Limiter API' };
+  }
   @Post('notifications')
   @UseGuards(ThrottlerGuard, RateLimitGuard)
   async sendEmail(@Body() dto: EmailDto): Promise<string> {

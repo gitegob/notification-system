@@ -1,6 +1,7 @@
 FROM node:16-slim AS base
 WORKDIR /usr/src/app
 
+
 FROM base AS build
 COPY ./package.json ./package-lock.json ./
 RUN npm ci
@@ -9,5 +10,7 @@ RUN npm run build
 
 FROM base AS production
 COPY --from=build /usr/src/app/ ./
+
+EXPOSE 4000
 
 CMD ["npm","run","start:prod"]

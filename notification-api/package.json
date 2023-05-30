@@ -28,6 +28,7 @@
     "amqplib": "^0.10.3",
     "axios": "^1.4.0",
     "dotenv": "^16.0.3",
+    "nestjs-eureka": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
   },
