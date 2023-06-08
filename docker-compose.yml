@@ -17,7 +17,7 @@ services:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
       THROTTLE_TTL: "60"
       THROTTLE_LIMIT: "80"
-      EUREKA_HOST: host.docker.internal
+      EUREKA_HOST: eureka
       EUREKA_PORT: "8761"
     ports:
       - 3000:3000
@@ -29,7 +29,7 @@ services:
     build: ./notification-api
     environment:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
-      EUREKA_HOST: host.docker.internal
+      EUREKA_HOST: eureka
       EUREKA_PORT: "8761"
     ports:
       - 4000:4000
@@ -66,6 +66,14 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     restart: on-failure
+
+  eureka:
+    container_name: eureka
+    build: ./eureka
+    ports:
+      - 8761:8761
+    restart: on-failure
+    # command: --eureka.instance.hostname=eureka --eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
 
 volumes:
   redis_data:
